@@ -86,6 +86,10 @@ def stats_alone():
 def stats_create(): # Redirects
     return redirect(url_for("create"))
 
+@app.route("/stats/<nothing>/create/")
+def stats_create_dynamic(nothing): # Redirects
+    return redirect(url_for("create"))
+
 @app.route("/create/", methods=['GET', 'POST'])
 def create():
     return render_template("create.html")
@@ -154,4 +158,4 @@ def api_redirect():
     return redirect()
 
 if __name__ == "__main__":
-    app.run()
+    app.run(debug=True)
