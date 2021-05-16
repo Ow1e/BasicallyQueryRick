@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,800;1,700&display=swap" rel="stylesheet"> 
+    <script src="https://kit.fontawesome.com/bdab8978bd.js" crossorigin="anonymous"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@300&display=swap" rel="stylesheet">
+    <title>Create Code</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+        .sans {
+            font-family: 'Open Sans', sans-serif;
+        }
+        .rail {
+            font-family: 'Raleway', sans-serif;
+        }
+        .b2 {
+            background: hsla(333, 100%, 53%, 1);
+
+            background: linear-gradient(225deg, hsla(333, 100%, 53%, 1) 0%, hsla(33, 94%, 57%, 1) 100%);
+
+            background: -moz-linear-gradient(225deg, hsla(333, 100%, 53%, 1) 0%, hsla(33, 94%, 57%, 1) 100%);
+
+            background: -webkit-linear-gradient(225deg, hsla(333, 100%, 53%, 1) 0%, hsla(33, 94%, 57%, 1) 100%);
+
+            filter: progid: DXImageTransform.Microsoft.gradient( startColorstr="#FF0F7B", endColorstr="#F89B29", GradientType=1 );
+        }
+        .b1 {
+            color: hsla(333, 100%, 53%, 1);
+            font-size: 72px;
+            background: linear-gradient(225deg, hsla(333, 100%, 53%, 1) 0%, hsla(33, 94%, 57%, 1) 100%);
+            background: -moz-linear-gradient(225deg, hsla(333, 100%, 53%, 1) 0%, hsla(33, 94%, 57%, 1) 100%);
+            background: -webkit-linear-gradient(225deg, hsla(333, 100%, 53%, 1) 0%, hsla(33, 94%, 57%, 1) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .center {
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+            width: 50%;
+        }
+        .nomargin {
+            margin: 0;
+            padding: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="w3-display-container" style="height: 100vh;">
+        <h2 class="sans b1 w3-display-topleft" style="font-size: 35px; margin: 20px;">BasiclyQR</h2>
+        <form class="w3-display-middle w3-light-grey" style="z-index: 100;" action="../createqr" method="POST">
+            <h1 class="b1 sans w3-center" style="font-size: 40px; margin: 20px;">Create Link</h1>
+            <div class="w3-row-padding">
+                <div class="w3-half">
+                  <input class="w3-input w3-border w3-round" type="text" name="group" placeholder="Group (Optional)">
+                </div>
+                <div class="w3-half">
+                  <input class="w3-input w3-border w3-round" type="text" name="name" placeholder="Name">
+                </div>
+            </div>
+            <div class="w3-row-padding w3-hide-small" style="margin: 10px;">
+                <input class="w3-input w3-border w3-round" type="text" name="location" placeholder="Coordiantes">
+            </div>
+            <div class="w3-row-padding">
+                <button class="w3-button w3-white w3-round w3-center" style="margin: 10px;width: 75%;">Create Link</button>
+            </div>
+        </form>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320" class="w3-display-bottommiddle" style="width: 100%;">
+            <path fill="#f3f4f5" fill-opacity="1" d="M0,192L1440,224L1440,320L0,320Z"></path>
+        </svg>
+    </div>
+</body>
+</html>

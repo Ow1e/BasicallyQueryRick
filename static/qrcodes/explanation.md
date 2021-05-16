@@ -1,0 +1,1 @@
+This is a folder for cache data, app.py creates this but git wont store empty folders
