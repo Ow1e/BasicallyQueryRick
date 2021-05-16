@@ -1,6 +1,6 @@
 # BasicallyQueryRick
 Collect open source data and rick roll people. The Repository includes the API and Source Code.
+And yes, its spelled wrong for a reason, It looks better.
 
 # API
-Right now theres no API but their are directory structures
-- /go/{id}/ (Will change to /api/go/<id> serverside but not on the basiclyqr.xyz)
+API Documentation is in the WIKI
