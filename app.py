@@ -1,8 +1,9 @@
-from types import CodeType
 from flask import Flask, redirect, url_for, session, render_template, request
-from flask_sqlalchemy import SQLAlchemy
+from flask.templating import render_template_string
+from flask_sqlalchemy import SQLAlchemy, _BoundDeclarativeMeta
 from datetime import datetime
 import qrcode.image.svg, os
+import json
 
 app = Flask(__name__)
 app.secret_key = b'SECRET'
@@ -17,11 +18,11 @@ class Places(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     place = db.Column(db.String(50), nullable=False)
     place_group = db.Column(db.String(50), nullable=False)
-    place_coordinates = db.Column(db.String(50), nullable=False)
+    place_location = db.Column(db.String(50), nullable=False)
     date_created = db.Column(db.DateTime, default=datetime.utcnow)
     # Function to create string
     def __repr__(self): 
-        return f"Place('{self.place}', '{self.place_coordinates}', '{self.date_created}')"
+        return f"Place('{self.place}', '{self.place_location}', '{self.date_created}')"
 
 class People(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -68,7 +69,7 @@ def stats(id = None):
         url = URL+"/go/{}/".format(id)
         cqr = "/qrcode/{}.svg".format(id)
         cqr_desc = 'You can also create custom QR Codes!'
-        return render_template("stats.html", data=front, rolls=len(statistics), url=url, cqr=cqr, cqr_desc=cqr_desc)
+        return render_template("panel.html", data=front, rolls=len(statistics), url=url, cqr=cqr, cqr_desc=cqr_desc)
     else:
         return redirect(url_for("stats_alone"))
 
@@ -79,7 +80,7 @@ def stats_alone():
     url = URL+"/create/"
     cqr = "/static/mainqr.svg"
     cqr_desc = "This QR Code is for creating a qr code and not a rickroll, we think"
-    return render_template("stats.html", data=front, rolls=len(statistics), url=url, cqr=cqr, cqr_desc=cqr_desc)
+    return render_template("panel.html", data=front, rolls=len(statistics), url=url, cqr=cqr, cqr_desc=cqr_desc)
 
 
 @app.route("/stats/go/create/")
@@ -101,9 +102,9 @@ def create_qr():
         place_location = request.form['location']
         place_group = request.form['group']
         if place_group!=None:
-            new_place = Places(place=place_name, place_coordinates=place_location, place_group=place_group)
+            new_place = Places(place=place_name, place_location=place_location, place_group=place_group)
         else:
-            new_place = Places(place=place_name, place_coordinates=place_location, place_group="Default")
+            new_place = Places(place=place_name, place_location=place_location, place_group="Default")
         try:
             db.session.add(new_place)
             db.session.commit()
@@ -136,6 +137,10 @@ def generate_code(id = 0):
     else:
         return render_template("error.html", code="403 We arent your mom!", description="Go create your own qr code dont use us!", icon="fa-bolt"), 403
 
+@app.route("/redirecttest/")
+def redirect_test():
+    return render_template("redirect.html", redirect="#")
+
 @app.route("/error/")
 def error_test():
     return render_template("error.html", code="403 Forbidden", description="Sorry but your not in the cool kids club. This place is for developers only!", icon="fa-layer-group"), 403
@@ -155,7 +160,83 @@ def error_unknown(e):
 # API
 @app.route("/api/")
 def api_redirect():
-    return redirect()
+    return redirect("https://github.com/thecodeavenger/BasiclyQueryRick/wiki/API")
 
-if __name__ == "__main__":
-    app.run(debug=True)
+@app.route("/api/user/query/all/")
+def index_all_users():
+    product = []
+    for i in People.query.all():
+        product.append({
+            "id": i.id,
+            "date": str(i.date_created),
+            "place": i.place,
+            "browser": {
+                "name": i.browser,
+                "version": i.browser_version,
+                "platform": i.platform
+            }
+        })
+    return json.dumps(product)
+
+@app.route("/api/user/query/<id>/")
+def index_specific_users(id):
+    product = []
+    for i in People.query.filter_by(place=id).all():
+        product.append({
+            "id": i.id,
+            "date": str(i.date_created),
+            "place": i.place,
+            "browser": {
+                "name": i.browser,
+                "version": i.browser_version,
+                "platform": i.platform
+            }
+        })
+    return json.dumps(product)
+
+@app.route("/api/user/<id>/")
+def index_specific_user(id):
+    product = []
+    for i in People.query.filter_by(id=id).all():
+        product.append({
+            "id": i.id,
+            "date": str(i.date_created),
+            "place": i.place,
+            "browser": {
+                "name": i.browser,
+                "version": i.browser_version,
+                "platform": i.platform
+            }
+        })
+    return json.dumps(product)
+
+@app.route("/api/location/query/all/")
+def index_all_locations():
+    product = []
+    for i in Places.query.all():
+        product.append({
+            "id": i.id,
+            "name": i.place,
+            "group": i.place_group,
+            "location": i.place_location,
+            "date": str(i.date_created)
+        })
+    return json.dumps(product)
+
+@app.route("/api/location/query/<id>/")
+def index_specific_location(id):
+    product = []
+    for i in Places.query.filter_by(id=id).all():
+        product.append({
+            "id": i.id,
+            "name": i.place,
+            "group": i.place_group,
+            "location": i.place_location,
+            "date": str(i.date_created)
+        })
+    return json.dumps(product)
+
+if __name__ == '__main__':
+    app.jinja_env.auto_reload = True
+    app.config['TEMPLATES_AUTO_RELOAD'] = True
+    app.run(debug=True, host='0.0.0.0')
