@@ -55,7 +55,7 @@
 </head>
 <body>
     <div class="w3-display-container" style="height: 100vh;">
-        <h2 class="sans b1 w3-display-topleft" style="font-size: 35px; margin: 20px;">BasiclyQR</h2>
+        <a href="../"><h2 class="sans b1 w3-display-topleft" style="font-size: 35px; margin: 20px;">BasiclyQR</h2></a>
         <a href="../go/create" class="w3-display-topright" style="margin: 20px;"><button class="w3-button b2 w3-text-white sans w3-hover-text-white w3-round" style="font-size: 20px;">Create a rickroll</button></a>
         <div class="w3-display-left w3-hide-small" style="width: 15%; height: 80%;">
             <image src="{{cqr}}" width="100%">
@@ -64,14 +64,11 @@
         <div class="w3-display-right w3-hide-small" style="padding: 10px; width: 20%; height: 80%;">
             <div class="w3-light-grey w3-round" style="padding: 10px; font-size: 20px;">Recently RickRolled</div>
             {% for i in data %}
-            <div class="w3-light-grey w3-round" style="padding: 10px; font-size: 20px;">{{i.browser}} on {{i.platform}}</div>
+            <div class="w3-light-grey w3-round" style="padding: 10px; font-size: 20px;">[{{i.date_created.year}}-{{i.date_created.month}}-{{i.date_created.day}} {{i.date_created.hour}}:{{i.date_created.minute}}] {{i.browser}} on {{i.platform}}</div>
             {% endfor %}
         </div>
         <div class="w3-display-middle w3-hide-medium w3-hide-large" style="padding: 10px; width: 100%; height: 80%;">
-            <div class="w3-light-grey w3-round" style="padding: 10px; font-size: 20px;">Recently RickRolled</div>
-            {% for i in data %}
-            <div class="w3-light-grey w3-round" style="padding: 10px; font-size: 20px;">{{i.browser}} on {{i.platform}}</div>
-            {% endfor %}
+            <div class="w3-light-grey w3-round" style="padding: 10px; font-size: 20px;">Recently Rickrolled</div>
             <image src="{{cqr}}" width="50%" style="margin-left: auto; margin-right: auto;" class="w3-center">
             <p style="width: 50%;">{{cqr_desc}}</p>
         </div>
