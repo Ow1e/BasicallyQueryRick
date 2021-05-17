@@ -194,13 +194,6 @@ def index_specific_users(id):
         })
     return json.dumps(product)
 
-@app.route("/api/user/query/group/<id>/")
-def index_grouped_users(id):
-    product = []
-    for i in Places.query.all():
-        if i.place_group == id:
-            product.append(i.id)
-    return json.dumps(product)
 
 @app.route("/api/user/<id>/")
 def index_specific_user(id):
@@ -242,6 +235,14 @@ def index_specific_location(id):
             "location": i.place_location,
             "date": str(i.date_created)
         })
+    return json.dumps(product)
+
+@app.route("/api/location/query/group/<id>/")
+def index_grouped_users(id):
+    product = []
+    for i in Places.query.all():
+        if i.place_group == id:
+            product.append(i.id)
     return json.dumps(product)
 
 if __name__ == '__main__':
