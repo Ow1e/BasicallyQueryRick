@@ -22,7 +22,7 @@ class Places(db.Model):
     date_created = db.Column(db.DateTime, default=datetime.utcnow)
     # Function to create string
     def __repr__(self): 
-        return f"Place('{self.place}', '{self.place_location}', '{self.date_created}')"
+        return f"Place('{self.place}', '{self.place_group}', '{self.place_location}', '{self.date_created}')"
 
 class People(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -194,6 +194,14 @@ def index_specific_users(id):
         })
     return json.dumps(product)
 
+@app.route("/api/user/query/group/<id>/")
+def index_grouped_users(id):
+    product = []
+    for i in Places.query.all():
+        if i.place_group == id:
+            product.append(i.id)
+    return json.dumps(product)
+
 @app.route("/api/user/<id>/")
 def index_specific_user(id):
     product = []
@@ -237,6 +245,4 @@ def index_specific_location(id):
     return json.dumps(product)
 
 if __name__ == '__main__':
-    app.jinja_env.auto_reload = True
-    app.config['TEMPLATES_AUTO_RELOAD'] = True
-    app.run(debug=True, host='0.0.0.0')
+    app.run(host="0.0.0.0")
