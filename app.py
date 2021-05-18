@@ -79,12 +79,22 @@ def apply(place):
                 result = requests.post(url, json = data)
         except:
             pass
-
-        place_query = Places.query.get(place)
-        if place_query==None:
-            return render_template("redirect.html", redirect="/redirect", title="BasiclyQR")
+        
+        if request.args.get("v", "https://www.youtube.com/watch?v=dQw4w9WgXcQ")=="https://www.youtube.com/watch?v=dQw4w9WgXcQ":
+            redirect_url = "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+        elif request.args.get("v", "https://www.youtube.com/watch?v=dQw4w9WgXcQ")=="forever":
+            redirect_url = "https://www.youtube.com/watch?v=yPYZpwSpKmA"
         else:
-            return render_template("redirect.html", redirect="/redirect", title=place_query.place)
+            redirect_url = request.form.get("v", "https://www.youtube.com/watch?v={}".format(request.args.get("v", "https://www.youtube.com/watch?v=dQw4w9WgXcQ")))
+        place_query = Places.query.get(place)
+
+        if str(request.args.get("r", False)).lower()=='false':
+            return redirect(redirect_url)
+        else:
+            if place_query==None:
+                return render_template("redirect.html", redirect=redirect_url, title="BasiclyQR")
+            else:
+                return render_template("redirect.html", redirect=redirect_url, title=place_query.place)
     else:
         return redirect(url_for('.index'))
 
@@ -142,10 +152,6 @@ def create_qr():
             return render_template("error.html", code="503 Tantrum", description="You made our SQLAlchemy Database go crazy! Try next time becuse its most likely your fault", icon="fa-layer-group"), 404
     else:
         return url_for("index")
-
-@app.route("/redirect/")
-def rick():
-    return redirect("https://www.youtube.com/watch?v=dQw4w9WgXcQ")
 
 @app.route("/qrcode/<int:id>.svg")
 def generate_code(id = 0):
