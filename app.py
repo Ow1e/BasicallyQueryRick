@@ -137,6 +137,10 @@ def generate_code(id = 0):
     else:
         return render_template("error.html", code="403 We arent your mom!", description="Go create your own qr code dont use us!", icon="fa-bolt"), 403
 
+@app.route("/stats/create/")
+def redirect_fix():
+    return redirect(url_for("create"))
+
 @app.route("/redirecttest/")
 def redirect_test():
     return render_template("redirect.html", redirect="#")
@@ -246,4 +250,6 @@ def index_grouped_users(id):
     return json.dumps(product)
 
 if __name__ == '__main__':
-    app.run(host="0.0.0.0")
+    app.jinja_env.auto_reload = True
+    app.config['TEMPLATES_AUTO_RELOAD'] = True
+    app.run(debug=True, host='0.0.0.0')
