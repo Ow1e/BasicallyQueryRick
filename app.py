@@ -88,7 +88,7 @@ def apply(place):
             redirect_url = request.form.get("v", "https://www.youtube.com/watch?v={}".format(request.args.get("v", "https://www.youtube.com/watch?v=dQw4w9WgXcQ")))
         place_query = Places.query.get(place)
 
-        if str(request.args.get("r", False)).lower()=='false':
+        if str(request.args.get("r", True)).lower()=='false':
             return redirect(redirect_url)
         else:
             if place_query==None:
@@ -213,7 +213,7 @@ def index_all_users():
                 "platform": i.platform
             }
         })
-    return product
+    return jsonify(product)
 
 @app.route("/api/user/query/<id>/")
 def index_specific_users(id):
@@ -229,7 +229,7 @@ def index_specific_users(id):
                 "platform": i.platform
             }
         })
-    return product
+    return jsonify(product)
 
 
 @app.route("/api/user/<id>/")
@@ -246,7 +246,7 @@ def index_specific_user(id):
                 "platform": i.platform
             }
         })
-    return product
+    return jsonify(product)
 
 @app.route("/api/location/query/all/")
 def index_all_locations():
@@ -259,7 +259,7 @@ def index_all_locations():
             "location": i.place_location,
             "date": str(i.date_created)
         })
-    return product
+    return jsonify(product)
 
 @app.route("/api/location/query/<id>/")
 def index_specific_location(id):
@@ -272,7 +272,7 @@ def index_specific_location(id):
             "location": i.place_location,
             "date": str(i.date_created)
         })
-    return product
+    return jsonify(product)
 
 @app.route("/api/location/query/group/<id>/")
 def index_grouped_users(id):
