@@ -1,4 +1,4 @@
-from flask import Flask, redirect, url_for, session, render_template, request
+from flask import Flask, redirect, url_for, session, render_template, request, jsonify
 from flask.templating import render_template_string
 from flask_sqlalchemy import SQLAlchemy, _BoundDeclarativeMeta
 from configparser import ConfigParser
@@ -213,7 +213,7 @@ def index_all_users():
                 "platform": i.platform
             }
         })
-    return json.dumps(product)
+    return product
 
 @app.route("/api/user/query/<id>/")
 def index_specific_users(id):
@@ -229,7 +229,7 @@ def index_specific_users(id):
                 "platform": i.platform
             }
         })
-    return json.dumps(product)
+    return product
 
 
 @app.route("/api/user/<id>/")
@@ -246,7 +246,7 @@ def index_specific_user(id):
                 "platform": i.platform
             }
         })
-    return json.dumps(product)
+    return product
 
 @app.route("/api/location/query/all/")
 def index_all_locations():
@@ -259,7 +259,7 @@ def index_all_locations():
             "location": i.place_location,
             "date": str(i.date_created)
         })
-    return json.dumps(product)
+    return product
 
 @app.route("/api/location/query/<id>/")
 def index_specific_location(id):
@@ -272,7 +272,7 @@ def index_specific_location(id):
             "location": i.place_location,
             "date": str(i.date_created)
         })
-    return json.dumps(product)
+    return product
 
 @app.route("/api/location/query/group/<id>/")
 def index_grouped_users(id):
@@ -280,7 +280,7 @@ def index_grouped_users(id):
     for i in Places.query.all():
         if i.place_group == id:
             product.append(i.id)
-    return json.dumps(product)
+    return product
 
 if __name__ == '__main__':
     app.jinja_env.auto_reload = True
