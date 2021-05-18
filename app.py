@@ -1,12 +1,26 @@
 from flask import Flask, redirect, url_for, session, render_template, request
 from flask.templating import render_template_string
 from flask_sqlalchemy import SQLAlchemy, _BoundDeclarativeMeta
+from configparser import ConfigParser
 from datetime import datetime
 import qrcode.image.svg, os
 import json
+import requests
+import os
+
+config = ConfigParser()
+if not os.path.exists("config.ini"):
+    config["CONFIG"] = {
+        "KEY": "SECRET",
+        "WEBHOOK": ""
+    }
+    with open("config.ini", "w") as f:
+        config.write(f)
+
+config.read("config.ini")
 
 app = Flask(__name__)
-app.secret_key = b'SECRET'
+app.secret_key = config["CONFIG"]["KEY"].encode()
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///sqlite/database.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
 
@@ -50,6 +64,19 @@ def apply(place):
         try:
             db.session.add(new_person)
             db.session.commit()
+            if config["CONFIG"]["WEBHOOK"]!='':
+                url = config["CONFIG"]["WEBHOOK"]
+                data = {
+                    "content" : "",
+                    "username" : "BasiclyQR"
+                }
+                data["embeds"] = [
+                    {       
+                    "description" : f"Browser: {new_person.browser.capitalize()}, Device: {new_person.platform.capitalize()}, Place Location: {Places.query.filter_by(id=new_person.place).all()[0].place_location}, Place ID: {new_person.place}",
+                    "title" : "Somebody got rick rolled!"
+                    }
+                ]
+                result = requests.post(url, json = data)
         except:
             pass
 
