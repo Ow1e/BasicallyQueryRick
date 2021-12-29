@@ -6,7 +6,7 @@ from datetime import datetime
 import qrcode.image.svg, os
 import json
 import requests
-import os
+import sys
 
 config = ConfigParser()
 if not os.path.exists("config.ini"):
@@ -27,6 +27,10 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
 URL = "https://basiclyqr.xyz"
 
 db = SQLAlchemy(app)
+
+if not os.path.exists("sqlite"): # Heroku wont just install a sqlite database
+    os.mkdir("sqlite")
+    db.create_all()
 
 class Places(db.Model):
     id = db.Column(db.Integer, primary_key=True)
